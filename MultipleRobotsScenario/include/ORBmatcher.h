@@ -37,7 +37,7 @@ namespace iORB_SLAM
 class ORBmatcher
 {    
 public:
-
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     ORBmatcher(float nnratio=0.6, bool checkOri=true);
 
     // Computes the Hamming distance between two ORB descriptors

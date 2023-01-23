@@ -34,6 +34,7 @@ namespace iORB_SLAM
 class MapDrawer
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     MapDrawer(Map* pMap, const string &strSettingPath);
 
     Map* mpMap;

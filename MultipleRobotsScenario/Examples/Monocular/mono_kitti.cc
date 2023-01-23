@@ -89,13 +89,13 @@ int main(int argc, char **argv)
     
     
     
-    //Create the second SLAM system
-    iORB_SLAM::System SLAM2(argv[1],argv[2],iORB_SLAM::System::MONOCULAR,false, bUseMMaps);
-    //Assign the mutli-mapper
-    SLAM2.SetMultiMapper(pMMapper);  
+    // //Create the second SLAM system
+    // iORB_SLAM::System SLAM2(argv[1],argv[2],iORB_SLAM::System::MONOCULAR,false, bUseMMaps);
+    // //Assign the mutli-mapper
+    // SLAM2.SetMultiMapper(pMMapper);  
     
-    //Run the thread (Robot2)
-    thread Run2(RunSLAM2, ref(start2), ref(end2), ref(SLAM2), ref(vstrImgFN2), ref(vTS2));
+    // //Run the thread (Robot2)
+    // thread Run2(RunSLAM2, ref(start2), ref(end2), ref(SLAM2), ref(vstrImgFN2), ref(vTS2));
         
     //Run the Multi-mapper thread
     std::thread* ptMultiMapping = new thread(&iORB_SLAM::MultiMapper::Run, pMMapper);
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
     
     
     Run.join();
-    Run2.join();
+    // Run2.join();
     ptMultiMapping->join();
     
     //End time
@@ -169,7 +169,7 @@ void RunSLAM(int& start, int& nImages, iORB_SLAM::System& SLAM, vector<string>& 
         // Read image from file
         im = cv::imread(vstrImageFilenames[ni],CV_LOAD_IMAGE_UNCHANGED);
         double tframe = vTimestamps[ni];
-
+        // cout << "reading img with ts " << tframe << endl;
         if(im.empty())
         {
             cerr << endl << "Failed to load image at: " << vstrImageFilenames[ni] << endl;
@@ -232,10 +232,12 @@ void RunSLAM(int& start, int& nImages, iORB_SLAM::System& SLAM, vector<string>& 
     
     date = time_s;
     
-    // Save camera trajectory
-    SLAM.SaveTrajectoryKITTI("KeyFrameTrajectory_kitti"+date+".txt");
-    SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory"+date+".txt");
-    SLAM.SaveMultipleMapsTrajectories("Maps"+date+".txt");
+    // // Save camera trajectory
+    // SLAM.SaveTrajectoryKITTI("KeyFrameTrajectory_kitti"+date+".txt");
+    // SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory"+date+".txt");
+    // SLAM.SaveMultipleMapsTrajectories("Maps"+date+".txt");
+    SLAM.SaveMultipleMapsTrajectories("/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario/output/Maps.txt");
+    SLAM.SaveTrackingStates();
 }
 
 void RunSLAM2(int& start, int& nImages, iORB_SLAM::System& SLAM, vector<string>& vstrImageFilenames, vector<double>& vTimestamps)

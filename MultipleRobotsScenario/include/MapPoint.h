@@ -39,6 +39,7 @@ class Frame;
 class MapPoint
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     MapPoint(const cv::Mat &Pos, KeyFrame* pRefKF, Map* pMap);
     MapPoint(const cv::Mat &Pos,  Map* pMap, Frame* pFrame, const int &idxF);
 

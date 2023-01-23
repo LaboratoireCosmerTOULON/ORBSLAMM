@@ -29,6 +29,7 @@
 #include "ORBVocabulary.h"
 #include "KeyFrame.h"
 #include "ORBextractor.h"
+#include "Converter.h"
 
 #include <opencv2/opencv.hpp>
 
@@ -43,6 +44,7 @@ class KeyFrame;
 class Frame
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     Frame();
 
     // Copy constructor.

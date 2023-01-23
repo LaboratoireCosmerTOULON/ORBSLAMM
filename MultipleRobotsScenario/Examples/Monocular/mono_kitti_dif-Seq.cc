@@ -77,7 +77,7 @@ int main(int argc, char **argv)
     iORB_SLAM::MultiMapper* pMMapper = new iORB_SLAM::MultiMapper();
     
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    iORB_SLAM::System SLAM(argv[1],argv[2],iORB_SLAM::System::MONOCULAR,true, bUseMMaps);
+    iORB_SLAM::System SLAM(argv[1],argv[2],iORB_SLAM::System::MONOCULAR,true, bUseMMaps, 0);
     //Assign the multi-mapper
     SLAM.SetMultiMapper(pMMapper);
     
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
     
     
     //Create the second SLAM system
-    iORB_SLAM::System SLAM2(argv[1],argv[6],iORB_SLAM::System::MONOCULAR,false, bUseMMaps);
+    iORB_SLAM::System SLAM2(argv[1],argv[6],iORB_SLAM::System::MONOCULAR,false, bUseMMaps, 1);
     //Assign the mutli-mapper
     SLAM2.SetMultiMapper(pMMapper);  
     
@@ -233,9 +233,10 @@ void RunSLAM(int& start, int& nImages, iORB_SLAM::System& SLAM, vector<string>& 
     date = time_s;
     
     // Save camera trajectory
-    SLAM.SaveTrajectoryKITTI("KeyFrameTrajectory_kitti"+date+".txt");
-    SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory"+date+".txt");
-    SLAM.SaveMultipleMapsTrajectories("Maps"+date+".txt");
+    // SLAM.SaveTrajectoryKITTI("KeyFrameTrajectory_kitti"+date+".txt");
+    // SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory"+date+".txt");
+    SLAM.SaveMultipleMapsTrajectories("/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario/output/Maps.txt");
+    SLAM.SaveTrackingStates();
 }
 
 void RunSLAM2(int& start, int& nImages, iORB_SLAM::System& SLAM, vector<string>& vstrImageFilenames, vector<double>& vTimestamps)
@@ -315,7 +316,8 @@ void RunSLAM2(int& start, int& nImages, iORB_SLAM::System& SLAM, vector<string>&
     date = time_s;
     
     // Save camera trajectory
-    SLAM.SaveTrajectoryKITTI("KeyFrameTrajectory_kitti"+date+".txt");
+    // SLAM.SaveTrajectoryKITTI("KeyFrameTrajectory_kitti"+date+".txt");
     //SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory"+date+".txt");
     //SLAM.SaveMultipleMapsTrajectories("Maps"+date+".txt");
+    SLAM.SaveTrackingStates();
 }

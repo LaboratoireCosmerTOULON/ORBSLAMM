@@ -60,6 +60,7 @@ namespace iORB_SLAM
 
 class PnPsolver {
  public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   PnPsolver(const Frame &F, const vector<MapPoint*> &vpMapPointMatches);
 
   ~PnPsolver();

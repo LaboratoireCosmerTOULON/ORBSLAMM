@@ -1484,6 +1484,14 @@ static void buffer_written(struct v4l2_loopback_device *dev, struct v4l2l_buffer
 	spin_unlock_bh(&dev->lock);
 }
 
+void do_gettimeofday(struct timeval *tv) // since do_gettimeofday is unknown from my linux version
+{
+	struct timespec64 ts;
+	ktime_get_real_ts64(&ts);
+	tv->tv_sec = ts.tv_sec;
+	tv->tv_usec = ts.tv_nsec;
+}
+
 /* put buffer to queue
  * called on VIDIOC_QBUF
  */

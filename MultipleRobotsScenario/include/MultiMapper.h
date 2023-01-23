@@ -50,6 +50,7 @@ public:
         Eigen::aligned_allocator<std::pair<const KeyFrame*, g2o::Sim3> > > KeyFrameAndPose;
     
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     MultiMapper();
     MultiMapper(Map* pMap, KeyFrameDatabase* pDB, ORBVocabulary* pVoc);
     

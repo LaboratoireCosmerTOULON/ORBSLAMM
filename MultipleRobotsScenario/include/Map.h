@@ -58,6 +58,7 @@ class KeyFrame;
 class Map
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     Map(unsigned int id);
     Map(const Map &map);
 
@@ -114,6 +115,8 @@ public:
     bool isAttached();
     void printAttachedMaps();
 
+    bool mbIsEmpty = true;
+
 protected:
     std::set<MapPoint*> mspMapPoints;
     std::set<KeyFrame*> mspKeyFrames;
@@ -121,7 +124,8 @@ protected:
     std::vector<MapPoint*> mvpReferenceMapPoints;
     
     //Relative poses between this map and matched maps
-    std::map<Map*,g2o::Sim3> mRelativePoses;
+    std::map<Map*,g2o::Sim3, std::less<Map*>, 
+         Eigen::aligned_allocator<std::pair<const Map*, g2o::Sim3> >> mRelativePoses;
 
     long unsigned int mnMaxKFid;
     long unsigned int mnMaxMPid;

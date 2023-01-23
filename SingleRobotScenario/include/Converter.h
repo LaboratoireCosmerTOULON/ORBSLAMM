@@ -33,6 +33,7 @@ namespace iORB_SLAM
 class Converter
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     static std::vector<cv::Mat> toDescriptorVector(const cv::Mat &Descriptors);
 
     static g2o::SE3Quat toSE3Quat(const cv::Mat &cvT);

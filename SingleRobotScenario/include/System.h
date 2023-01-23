@@ -38,6 +38,10 @@
 #include "Viewer.h"
 #include "MapSerializer.h"
 
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 namespace iORB_SLAM
 {
 
@@ -67,7 +71,7 @@ public:
     };
 
 public:
-
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     // Initialize the SLAM system. It launches the Local Mapping, Loop Closing and Viewer threads.
     //System(const string &strVocFile, const string &strSettingsFile, const eSensor sensor, const bool bUseViewer = true);
     System(const string &strVocFile, const string &strSettingsFile, const eSensor sensor, const bool bUseViewer = true, const bool bUseMMapping = false);

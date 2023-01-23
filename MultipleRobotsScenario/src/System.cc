@@ -30,8 +30,8 @@ namespace iORB_SLAM
 {
 
 System::System(ORBVocabulary* pVocabulary, const string &strSettingsFile, const eSensor sensor,
-               const bool bUseViewer, const bool bUseMMapping):mSensor(sensor), mMapStatus(MAP_OK), mbReset(false),mbActivateLocalizationMode(false),
-        mbDeactivateLocalizationMode(false),mbUseMMapping(bUseMMapping)
+               const bool bUseViewer, const bool bUseMMapping, long unsigned int nId):mSensor(sensor), mMapStatus(MAP_OK), mbReset(false),mbActivateLocalizationMode(false),
+        mbDeactivateLocalizationMode(false),mbUseMMapping(bUseMMapping), mnId(nId)
 {
     // Output welcome message
     cout << endl <<
@@ -39,6 +39,11 @@ System::System(ORBVocabulary* pVocabulary, const string &strSettingsFile, const 
     "This program comes with ABSOLUTELY NO WARRANTY;" << endl  <<
     "This is free software, and you are welcome to redistribute it" << endl <<
     "under certain conditions. See LICENSE.txt." << endl << endl;
+
+    // Clear files
+    std::ofstream ofs;
+    ofs.open("/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario/output/MapLogs.txt", std::ofstream::out | std::ofstream::trunc);
+    ofs.close();
 
     cout << "Input sensor was set to: ";
 
@@ -131,8 +136,8 @@ System::System(ORBVocabulary* pVocabulary, const string &strSettingsFile, const 
 }
 
 System::System(const string &strVocFile, const string &strSettingsFile, const eSensor sensor,
-               const bool bUseViewer, const bool bUseMMapping):mSensor(sensor), mMapStatus(MAP_OK), mbReset(false),mbActivateLocalizationMode(false),
-        mbDeactivateLocalizationMode(false),mbUseMMapping(bUseMMapping)
+               const bool bUseViewer, const bool bUseMMapping, long unsigned int nId):mSensor(sensor), mMapStatus(MAP_OK), mbReset(false),mbActivateLocalizationMode(false),
+        mbDeactivateLocalizationMode(false),mbUseMMapping(bUseMMapping), mnId(nId)
 {
     // Output welcome message
     cout << endl <<
@@ -614,6 +619,11 @@ void System::SwitchMap(Map* pMap)
 void System::SwitchKFDB(KeyFrameDatabase* pKFDB)
 {
     mpKeyFrameDatabase = pKFDB;
+}
+
+void System::SaveTrackingStates()
+{
+    mpTracker->SaveStates();
 }
 
 } //namespace iORB_SLAM

@@ -28,6 +28,7 @@
 #include "ORBextractor.h"
 #include "Frame.h"
 #include "KeyFrameDatabase.h"
+#include "Converter.h"
 
 #include <mutex>
 
@@ -43,7 +44,8 @@ class KeyFrameDatabase;
 class KeyFrame
 {
 public:
-    KeyFrame(Frame &F, Map* pMap, KeyFrameDatabase* pKFDB);
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+    KeyFrame(Frame &F, Map* pMap, KeyFrameDatabase* pKFDB, long unsigned int nSystemId);
 //    KeyFrame();
 
     // Pose functions
@@ -139,6 +141,8 @@ public:
 
     // The following variables are accesed from only 1 thread or never change (no mutex needed).
 public:
+
+    long unsigned int mnSystemId;
 
     static long unsigned int nNextId;
     long unsigned int mnId;

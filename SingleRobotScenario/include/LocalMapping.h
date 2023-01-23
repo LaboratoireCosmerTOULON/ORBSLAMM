@@ -40,6 +40,7 @@ class Map;
 class LocalMapping
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     LocalMapping(Map* pMap, const float bMonocular);
 
     void SetLoopCloser(LoopClosing* pLoopCloser);

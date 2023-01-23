@@ -269,6 +269,7 @@ cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
         mCurrentFrame = Frame(mImGray,timestamp,mpORBextractorLeft,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth);
 
     Track();
+    mPastStates[timestamp] = mState;
 
     return mCurrentFrame.mTcw.clone();
 }
@@ -562,7 +563,7 @@ void Tracking::StereoInitialization()
         mCurrentFrame.SetPose(cv::Mat::eye(4,4,CV_32F));
 
         // Create KeyFrame
-        KeyFrame* pKFini = new KeyFrame(mCurrentFrame,mpMap,mpKeyFrameDB);
+        KeyFrame* pKFini = new KeyFrame(mCurrentFrame,mpMap,mpKeyFrameDB, mpSystem->mnId);
 
         // Insert KeyFrame in the map
         mpMap->AddKeyFrame(pKFini);
@@ -685,8 +686,8 @@ void Tracking::MonocularInitialization()
 void Tracking::CreateInitialMapMonocular()
 {
     // Create KeyFrames
-    KeyFrame* pKFini = new KeyFrame(mInitialFrame,mpMap,mpKeyFrameDB);
-    KeyFrame* pKFcur = new KeyFrame(mCurrentFrame,mpMap,mpKeyFrameDB);
+    KeyFrame* pKFini = new KeyFrame(mInitialFrame,mpMap,mpKeyFrameDB, mpSystem->mnId);
+    KeyFrame* pKFcur = new KeyFrame(mCurrentFrame,mpMap,mpKeyFrameDB, mpSystem->mnId);
 
 
     pKFini->ComputeBoW();
@@ -1128,7 +1129,7 @@ void Tracking::CreateNewKeyFrame()
     if(!mpLocalMapper->SetNotStop(true))
         return;
 
-    KeyFrame* pKF = new KeyFrame(mCurrentFrame,mpMap,mpKeyFrameDB);
+    KeyFrame* pKF = new KeyFrame(mCurrentFrame,mpMap,mpKeyFrameDB, mpSystem->mnId);
 
     mpReferenceKF = pKF;
     mCurrentFrame.mpReferenceKF = pKF;
@@ -1669,6 +1670,26 @@ void Tracking::InformMultiMapping(const bool& flag)
 void Tracking::InformDrawMap(Map* pMap)
 {
     mpMapDrawer->DrawMap(pMap);
+}
+
+void Tracking::SaveStates() 
+{
+    std::stringstream ss;
+    ss << "/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario/output/TrackingStatus_" << mpSystem->mnId << ".txt";
+    std::string filename = ss.str();
+    cout << endl << "Saving tracking status to " << filename << " ..." << endl;
+    ofstream f;
+    f.open(filename.c_str());
+    f << fixed;
+
+    for(map<double,eTrackingState>::iterator mit=mPastStates.begin(), mend=mPastStates.end(); mit!=mend; mit++)
+    {
+        f << setprecision(6) << mit->first << " " << mit->second << endl;
+    }
+
+    f.close();
+    cout << endl << "tracking status saved!" << endl;
+    
 }
 
 } //namespace iORB_SLAM

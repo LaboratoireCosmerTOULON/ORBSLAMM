@@ -37,6 +37,7 @@ class LoopClosing;
 class Optimizer
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     void static BundleAdjustment(const std::vector<KeyFrame*> &vpKF, const std::vector<MapPoint*> &vpMP,
                                  int nIterations = 5, bool *pbStopFlag=NULL, const unsigned long nLoopKF=0,
                                  const bool bRobust = true);

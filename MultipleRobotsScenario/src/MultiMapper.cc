@@ -55,7 +55,7 @@ namespace iORB_SLAM
                 // Detect loop candidates and check covisibility consistency
                 if(DetectLoop())
                 {
-//                    cout<<"MM Loop Detected!\n";
+                   cout<<"MM Loop Detected!\n";
                     //SaveTrajectory("MMaps.txt");
                 }
             }       
@@ -132,15 +132,15 @@ namespace iORB_SLAM
                         // avoid that local mapping erase it while it is being processed in this thread
                         pKeyFrame->SetNotErase();
                         
-//                        Frame* pCurrentFrame = pKeyFrame->getSourceFrame();
-//                        
-//                        if(!pCurrentFrame)
-//                            continue;
-//                        
-//                        // Compute Bag of Words Vector
-//                        //pCurrentFrame->ComputeBoW(); //This generated errors when using PnP to merge maps
-//                        
-//                        vector<KeyFrame*> vpCandidateKFs = pKFDB->DetectRelocalizationCandidates(pCurrentFrame);
+                        // Frame* pCurrentFrame = pKeyFrame->getSourceFrame();
+                        //                        
+                        // if(!pCurrentFrame)
+                        //     continue;
+                        //                        
+                        // Compute Bag of Words Vector
+                        // pCurrentFrame->ComputeBoW(); //This generated errors when using PnP to merge maps
+                        //                        
+                        // vector<KeyFrame*> vpCandidateKFs = pKFDB->DetectRelocalizationCandidates(pCurrentFrame);
                         
                         // Compute reference BoW similarity score
                         // This is the lowest score to a connected keyframe in the covisibility graph
@@ -176,8 +176,8 @@ namespace iORB_SLAM
                         // If enough matches are found we setup a PnP solver
                         ORBmatcher matcher(0.75,true);
 
-//                        vector<PnPsolver*> vpPnPsolvers;
-//                        vpPnPsolvers.resize(nKFs);
+                        // vector<PnPsolver*> vpPnPsolvers;
+                        // vpPnPsolvers.resize(nKFs);
                         
                         vector<Sim3Solver*> vpSim3Solvers;
                         vpSim3Solvers.resize(nKFs);
@@ -248,21 +248,24 @@ namespace iORB_SLAM
                                     continue;
 
                                 KeyFrame* pKF = vpCandidateKFs[i];
+                                std::cout << "checking candidate" << std::endl;
 
                                 // Perform 5 Ransac Iterations
                                 vector<bool> vbInliers;
                                 int nInliers;
                                 bool bNoMore;
 
-//                                PnPsolver* pSolver = vpPnPsolvers[i];
-//                                cv::Mat Tcw = pSolver->iterate(5,bNoMore,vbInliers,nInliers);
+                                // PnPsolver* pSolver = vpPnPsolvers[i];
+                                // cv::Mat Tcw = pSolver->iterate(5,bNoMore,vbInliers,nInliers);
                                 
                                 Sim3Solver* pSolver = vpSim3Solvers[i];
                                 cv::Mat Scm  = pSolver->iterate(5,bNoMore,vbInliers,nInliers);
+                                std::cout << "computing sim3" << std::endl;
 
                                 // If Ransac reachs max. iterations discard keyframe
                                 if(bNoMore)
                                 {
+                                    std::cout << "not enough RANSAC inliers, aborting" << std::endl;
                                     //cout<<"\tMM RANSAC Reaches Max\n";
                                     vbDiscarded[i]=true;
                                     pKF->SetErase();
@@ -275,7 +278,8 @@ namespace iORB_SLAM
                                     //Tcw.copyTo(pCurrentFrame->mTcw);
                                     //pKF->SetPose(Tcw);
                                    // set<MapPoint*> sFound;
-                
+                                    std::cout << "sim3 computed successfully" << std::endl;
+
                                     vector<MapPoint*> vpMapPointMatches(vvpMapPointMatches[i].size(), static_cast<MapPoint*>(NULL));
                                     for(size_t j=0, jend=vbInliers.size(); j<jend; j++)
                                     {
@@ -285,8 +289,8 @@ namespace iORB_SLAM
                                            //pCurrentFrame->mvpMapPoints[j]=vvpMapPointMatches[i][j];
                                            //sFound.insert(vvpMapPointMatches[i][j]);
                                         }
-//                                        else
-//                                            pCurrentFrame->mvpMapPoints[j]=NULL;
+                                        // else
+                                        // pCurrentFrame->mvpMapPoints[j]=NULL;
                                     }
                                                                         
 
@@ -296,15 +300,18 @@ namespace iORB_SLAM
                                     const float s = pSolver->GetEstimatedScale();
                                     
                                     matcher.SearchBySim3(pKeyFrame,pKF,vpMapPointMatches,s,R,t,7.5);
+                                    std::cout << "more matches" << std::endl;
 
                                     //Transformation between pKF of MapBase and pKeyframe of the new map.
                                     g2o::Sim3 gScm(Converter::toMatrix3d(R),Converter::toVector3d(t),s);
                                     
                                     const int nInliers = Optimizer::OptimizeSim3(pKeyFrame, pKF, vpMapPointMatches, gScm, 10, false);                                    
                                     //int nInliers = Optimizer::PoseOptimization(pCurrentFrame);
+                                    std::cout << "sim3 optimized" << std::endl;
                                     
                                     if(nInliers>=20)
                                     {
+                                        std::cout << "merge validated" << std::endl;
                                         bMatch = true;
                                         mpMatchedKF = pKF;
                                         g2o::Sim3 gSmw(Converter::toMatrix3d(pKF->GetRotation()),Converter::toVector3d(pKF->GetTranslation()),1.0);
@@ -325,11 +332,14 @@ namespace iORB_SLAM
                             pKeyFrame->SetErase();
                             continue;
                         }
+
+                        std::cout << "ok72" << std::endl;
                         
                         // Retrieve MapPoints seen in Loop Keyframe and neighbors
                         vector<KeyFrame*> vpLoopConnectedKFs = mpMatchedKF->GetVectorCovisibleKeyFrames();
                         vpLoopConnectedKFs.push_back(mpMatchedKF);
                         mvpLoopMapPoints.clear();
+                        std::cout << "ok73" << std::endl;
                         for(vector<KeyFrame*>::iterator vit=vpLoopConnectedKFs.begin(); vit!=vpLoopConnectedKFs.end(); vit++)
                         {
                             KeyFrame* pKF = *vit;
@@ -347,9 +357,11 @@ namespace iORB_SLAM
                                 }
                             }
                         }
+                        std::cout << "ok74" << std::endl;
 
                         // Find more matches projecting with the computed Sim3
                         matcher.SearchByProjection(pKeyFrame, mScw, mvpLoopMapPoints, mvpCurrentMatchedPoints,10);
+                        std::cout << "ok75" << std::endl;
 
                         // If enough matches accept Loop
                         int nTotalMatches = 0;
@@ -358,9 +370,10 @@ namespace iORB_SLAM
                             if(mvpCurrentMatchedPoints[i])
                                 nTotalMatches++;
                         }
-                        //cout<<"Total Matches = "<<nTotalMatches<<endl;
+                        cout<<"Total Matches = "<<nTotalMatches<<endl; // DEBUG JD
                         if(nTotalMatches>=40)
                         {
+                            std::cout << "ok76" << std::endl;
                             //To prevent creating a new map or shutting down while MM is working on merging
                             mbUpdatingMapPoses = true;
                             
@@ -391,41 +404,58 @@ namespace iORB_SLAM
                                                                                                
                                 mbSwapped = true;
                             }
-//                            else
-//                                if(pMap->isAttached() && pMapBase->isAttached())
-//                                {
-//                                    //we should update all the attached maps to the new pose
-//                                    
-//                                    for(std::vector<Map*>::iterator it = pMap->getAttachedMaps().begin(), itend=pMap->getAttachedMaps().end(); it != itend; it++)
-//                                    {
-//                                        Map* pmMap = *it;
-//                                        
-//                                        //In Multi Robot Scenario:
-//                                        //pmMap->StopLocalMapping();
-//                                        
-//                                        //attach to the baseMap
-//                                        g2o::Sim3 g2oScw = pmMap->relativePoseToAttachedMap(pMap)*mg2oScw;
-//                                        pmMap->attachToMap(pMapBase, g2oScw);
-//                                        pMapBase->attachToMap(pmMap, g2oScw.inverse());
-//                                        
-//                                        
-//                                        //UpdatePosesAndAdd(pmMap, pMapBase); //of pmMap keyframes and MapPoints
-//                                        
-//                                        //pmMap->ReleaseLocalMapping();
-//                                    }
-//                                }
+                            // else
+                            // if(pMap->isAttached() && pMapBase->isAttached())
+                            // {
+                            //     //we should update all the attached maps to the new pose
+                                                               
+                            //     for(std::vector<Map*>::iterator it = pMap->getAttachedMaps().begin(), itend=pMap->getAttachedMaps().end(); it != itend; it++)
+                            //     {
+                            //         Map* pmMap = *it;
+                                                                   
+                            //         //In Multi Robot Scenario:
+                            //         //pmMap->StopLocalMapping();
+                                                                   
+                            //         //attach to the baseMap
+                            //         g2o::Sim3 g2oScw = pmMap->relativePoseToAttachedMap(pMap)*mg2oScw;
+                            //         pmMap->attachToMap(pMapBase, g2oScw);
+                            //         pMapBase->attachToMap(pmMap, g2oScw.inverse());
+                                                                   
+                                                                   
+                            //         //UpdatePosesAndAdd(pmMap, pMapBase); //of pmMap keyframes and MapPoints
+                                                                   
+                            //         //pmMap->ReleaseLocalMapping();
+                            //     }
+                            // }
+                            std::cout << "ok77" << std::endl;
                             
                             pMap->attachToMap(pMapBase, mg2oScw);
-                            pMapBase->attachToMap(pMap, mg2oScw.inverse());
+                            std::cout << "ok775" << std::endl;
+                            g2o::Sim3 g2oScw = mg2oScw.inverse();
+                            pMapBase->attachToMap(pMap, g2oScw);
                             
-                            
+                            std::cout << "ok78" << std::endl;
 
                             UpdatePosesAndAdd(pMap, pMapBase, mg2oScw, pKeyFrame);
+                            std::cout << "ok79 = fine, ending" << std::endl;
                             
                             mbUpdatingMapPoses = false;
                             
                             //pMap->mnId = -1 - pMapBase->mnId;
                             //cout<<"Map"<<iiM<<" was removed!\n";
+
+                            double lastKF_ts=0;
+                            for(size_t iM_write=0, iendM_write=mvMapAndKFDB.size(); iM_write<iendM_write; iM_write++)
+                            {            
+                                Map* pMap_write = mvMapAndKFDB[iM_write].first;
+                                lastKF_ts = std::max(lastKF_ts, pMap_write->mpLastKF->mTimeStamp);
+                            }
+                            std::string filename("/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario/output/MapLogs.txt");
+                            std::ofstream file_out;
+                            file_out.open(filename, std::ios_base::app);
+                            file_out << fixed;
+                            file_out << "Merge of map " << pMap->mnId << " into " << pMapBase->mnId << ". Last KF ts is " << setprecision(6) << lastKF_ts << endl;
+                            file_out.close();
                             
                             return true;
                         }
@@ -877,7 +907,7 @@ namespace iORB_SLAM
                 vector<float> q = Converter::toQuaternion(R);
                 cv::Mat t = pKF->GetCameraCenter();
                 f << setprecision(6) << pKF->mTimeStamp << setprecision(7) << " " << t.at<float>(0) << " " << t.at<float>(1) << " " << t.at<float>(2)
-                  << " " << q[0] << " " << q[1] << " " << q[2] << " " << q[3] << endl;
+                  << " " << q[0] << " " << q[1] << " " << q[2] << " " << q[3] << " " << pKF->mnSystemId << endl;
 
             }
 

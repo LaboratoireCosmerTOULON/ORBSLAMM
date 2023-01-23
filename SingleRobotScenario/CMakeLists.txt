@@ -104,9 +104,9 @@ add_executable(mono_eth
 Examples/Monocular/mono_eth.cc)
 target_link_libraries(mono_eth ${PROJECT_NAME})
 
-add_executable(mono_NewCollege
-Examples/Monocular/mono_NewCollege.cc)
-target_link_libraries(mono_NewCollege ${PROJECT_NAME})
+# add_executable(mono_NewCollege
+# Examples/Monocular/mono_NewCollege.cc)
+# target_link_libraries(mono_NewCollege ${PROJECT_NAME})
 
 add_executable(mono_AGZ
 Examples/Monocular/mono_AGZ.cc)

@@ -24,6 +24,7 @@
 #include <vector>
 #include <list>
 #include <opencv/cv.h>
+#include "Converter.h"
 
 
 namespace iORB_SLAM
@@ -32,6 +33,7 @@ namespace iORB_SLAM
 class ExtractorNode
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     ExtractorNode():bNoMore(false){}
 
     void DivideNode(ExtractorNode &n1, ExtractorNode &n2, ExtractorNode &n3, ExtractorNode &n4);

@@ -38,10 +38,22 @@ void Map::AddKeyFrame(KeyFrame *pKF)
     unique_lock<mutex> lock(mMutexMap);
     mspKeyFrames.insert(pKF);
     mpLastKF = pKF;
+
+    if (mbIsEmpty)
+    {
+        std::string filename("/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario/output/MapLogs.txt");
+        std::ofstream file_out;
+        file_out.open(filename, std::ios_base::app);
+        file_out << fixed;
+        file_out << "Creation of map " << this->mnId << " with first KF ts " << setprecision(6) << pKF->mTimeStamp << " from System " << pKF->mnSystemId << endl;
+        file_out.close();
+        mbIsEmpty = false;
+    }
     
     if(!mpFirstKF)
+    {
         mpFirstKF = pKF;
-
+    }
         
     if(pKF->mnId>mnMaxKFid)
         mnMaxKFid=pKF->mnId;
@@ -200,8 +212,12 @@ void Map::clear()
 
 void Map::attachToMap(Map* pMap, g2o::Sim3 Pose)
 {
+    std::cout << "in1" << std::endl;
+    std::cout << "<<<<<<<<<<<<<<<<<< Pose.scale() : " << Pose.scale() << std::endl;
     mbIsAttached = true;
+    std::cout << "in2" << std::endl;
     mRelativePoses[pMap] = Pose;
+    std::cout << "in3" << std::endl;
         
 }
 

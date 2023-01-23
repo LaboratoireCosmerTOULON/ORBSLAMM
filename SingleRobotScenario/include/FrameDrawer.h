@@ -40,6 +40,7 @@ class Viewer;
 class FrameDrawer
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     FrameDrawer(Map* pMap);
 
     // Update info from the last processed frame.

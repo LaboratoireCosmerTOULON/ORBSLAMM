@@ -58,6 +58,7 @@ class KeyFrame;
 class Map
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     Map(unsigned int id);
     Map(const Map &map);
 

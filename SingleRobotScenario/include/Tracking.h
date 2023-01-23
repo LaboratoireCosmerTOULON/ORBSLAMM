@@ -58,6 +58,7 @@ class Tracking
 {  
 
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     Tracking(System* pSys, ORBVocabulary* pVoc, FrameDrawer* pFrameDrawer, MapDrawer* pMapDrawer, Map* pMap,
              MultiMapper* pMMapper, MapSerializer* pMapSerializer, KeyFrameDatabase* pKFDB, const string &strSettingPath, const int sensor, bool bMMapping);
 

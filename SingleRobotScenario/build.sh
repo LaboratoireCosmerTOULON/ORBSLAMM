@@ -22,7 +22,7 @@ echo "Configuring and building Thirdparty/v4l2loopback ..."
 make
 sudo make install
 
-cd ../../../
+cd ../../
 
 echo "Uncompress vocabulary ..."
 

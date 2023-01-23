@@ -38,6 +38,7 @@ distribution.
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include "Converter.h"
 
 // Help out windows:
 #if defined( _DEBUG ) && !defined( DEBUG )
@@ -133,6 +134,7 @@ struct TiXmlCursor
 class TiXmlVisitor
 {
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	virtual ~TiXmlVisitor() {}
 
 	/// Visit a document.
@@ -203,6 +205,7 @@ class TiXmlBase
 	friend class TiXmlDocument;
 
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	TiXmlBase()	:	userData(0)		{}
 	virtual ~TiXmlBase()			{}
 
@@ -431,6 +434,7 @@ class TiXmlNode : public TiXmlBase
 	friend class TiXmlElement;
 
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	#ifdef TIXML_USE_STL	
 
 	    /** An input stream operator, for every class. Tolerant of newlines and
@@ -786,6 +790,7 @@ class TiXmlAttribute : public TiXmlBase
 	friend class TiXmlAttributeSet;
 
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	/// Construct an empty attribute.
 	TiXmlAttribute() : TiXmlBase()
 	{
@@ -908,6 +913,7 @@ private:
 class TiXmlAttributeSet
 {
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	TiXmlAttributeSet();
 	~TiXmlAttributeSet();
 
@@ -948,6 +954,7 @@ private:
 class TiXmlElement : public TiXmlNode
 {
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	/// Construct an element.
 	TiXmlElement (const char * in_value);
 
@@ -1158,6 +1165,7 @@ private:
 class TiXmlComment : public TiXmlNode
 {
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	/// Constructs an empty comment.
 	TiXmlComment() : TiXmlNode( TiXmlNode::COMMENT ) {}
 	/// Construct a comment from text.
@@ -1209,6 +1217,7 @@ class TiXmlText : public TiXmlNode
 {
 	friend class TiXmlElement;
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	/** Constructor for text element. By default, it is treated as 
 		normal, encoded text. If you want it be output as a CDATA text
 		element, set the parameter _cdata to 'true'
@@ -1281,6 +1290,7 @@ private:
 class TiXmlDeclaration : public TiXmlNode
 {
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	/// Construct an empty declaration.
 	TiXmlDeclaration()   : TiXmlNode( TiXmlNode::DECLARATION ) {}
 
@@ -1350,6 +1360,7 @@ private:
 class TiXmlUnknown : public TiXmlNode
 {
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	TiXmlUnknown() : TiXmlNode( TiXmlNode::UNKNOWN )	{}
 	virtual ~TiXmlUnknown() {}
 
@@ -1389,6 +1400,7 @@ private:
 class TiXmlDocument : public TiXmlNode
 {
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	/// Create an empty document, that has no name.
 	TiXmlDocument();
 	/// Create a document with a name. The name of the document is also the filename of the xml.
@@ -1638,6 +1650,7 @@ private:
 class TiXmlHandle
 {
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	/// Create a handle from any node (at any depth of the tree.) This can be a null pointer.
 	TiXmlHandle( TiXmlNode* _node )					{ this->node = _node; }
 	/// Copy constructor
@@ -1737,6 +1750,7 @@ private:
 class TiXmlPrinter : public TiXmlVisitor
 {
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	TiXmlPrinter() : depth( 0 ), simpleTextPrint( false ),
 					 buffer(), indent( "    " ), lineBreak( "\n" ) {}
 

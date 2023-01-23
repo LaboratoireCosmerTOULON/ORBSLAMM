@@ -54,6 +54,7 @@ class MapSerializer
             MAP_FAILED,
             MAP_EXISTS
         };
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
         MapSerializer();
         MapSerializer(Map* map);
         MapSerializer(std::vector<Map*> maps);

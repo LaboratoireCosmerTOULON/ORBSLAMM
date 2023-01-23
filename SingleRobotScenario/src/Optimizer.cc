@@ -37,7 +37,6 @@
 namespace iORB_SLAM
 {
 
-
 void Optimizer::MMGlobalBundleAdjustemnt(Map* pMap, int nIterations, bool* pbStopFlag, const unsigned long nLoopKF, const bool bRobust)
 {
     vector<KeyFrame*> vpKFs = pMap->GetAllKeyFrames();

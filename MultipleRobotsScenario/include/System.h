@@ -38,6 +38,10 @@
 #include "Viewer.h"
 #include "MapSerializer.h"
 
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 namespace iORB_SLAM
 {
 
@@ -67,11 +71,11 @@ public:
     };
 
 public:
-
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     // Initialize the SLAM system. It launches the Local Mapping, Loop Closing and Viewer threads.
     //System(const string &strVocFile, const string &strSettingsFile, const eSensor sensor, const bool bUseViewer = true);
-    System(const string &strVocFile, const string &strSettingsFile, const eSensor sensor, const bool bUseViewer = true, const bool bUseMMapping = false);
-    System(ORBVocabulary* pVocabulary, const string &strSettingsFile, const eSensor sensor, const bool bUseViewer = true, const bool bUseMMapping = false);
+    System(const string &strVocFile, const string &strSettingsFile, const eSensor sensor, const bool bUseViewer = true, const bool bUseMMapping = false, long unsigned int nId = 0);
+    System(ORBVocabulary* pVocabulary, const string &strSettingsFile, const eSensor sensor, const bool bUseViewer = true, const bool bUseMMapping = false, long unsigned int nId = 0);
 
     // Proccess the given stereo frame. Images must be synchronized and rectified.
     // Input images: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.
@@ -132,6 +136,10 @@ public:
     // TODO: Save/Load functions
     MapStatus SaveMap(const string &filename);
     MapStatus LoadMap(const string &filename);
+
+    long unsigned int mnId;
+
+    void SaveTrackingStates();
 
 private:
 

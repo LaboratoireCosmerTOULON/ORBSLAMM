@@ -31,6 +31,7 @@
 #include"MapPoint.h"
 #include"KeyFrame.h"
 #include<pangolin/pangolin.h>
+#include "Converter.h"
 
 #include<mutex>
 
@@ -40,6 +41,7 @@ namespace iORB_SLAM
 class xmlMapDrawer
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     xmlMapDrawer(Map* pMap, const string &strMapFile);
 
     void DrawMapPoints();
