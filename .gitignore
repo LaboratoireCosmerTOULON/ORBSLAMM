@@ -1,11 +1,11 @@
-# Ignore all
-*
+# # Ignore all
+# *
 
-# Unignore all with extensions
-!*.*
+# # Unignore all with extensions
+# !*.*
 
-# Unignore all dirs
-!*/
+# # Unignore all dirs
+# !*/
 
 MultipleRobotsScenario/Examples/Monocular/mono_Bebop
 MultipleRobotsScenario/Examples/Monocular/mono_eth
