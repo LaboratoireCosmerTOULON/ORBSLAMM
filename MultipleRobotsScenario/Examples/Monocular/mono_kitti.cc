@@ -238,6 +238,7 @@ void RunSLAM(int& start, int& nImages, iORB_SLAM::System& SLAM, vector<string>& 
     // SLAM.SaveMultipleMapsTrajectories("Maps"+date+".txt");
     SLAM.SaveMultipleMapsTrajectories("/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario/output/Maps.txt");
     SLAM.SaveTrackingStates();
+    SLAM.SaveTrajectory("/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario/output/Trajectory.txt");
 }
 
 void RunSLAM2(int& start, int& nImages, iORB_SLAM::System& SLAM, vector<string>& vstrImageFilenames, vector<double>& vTimestamps)

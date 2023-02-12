@@ -63,18 +63,18 @@ System::System(ORBVocabulary* pVocabulary, const string &strSettingsFile, const 
     }
 
 
-//    //Load ORB Vocabulary
-//    cout << endl << "Loading ORB Vocabulary. This could take a while..." << endl;
-//
-//    mpVocabulary = new ORBVocabulary();
-//    bool bVocLoad = mpVocabulary->loadFromTextFile(strVocFile);
-//    if(!bVocLoad)
-//    {
-//        cerr << "Wrong path to vocabulary. " << endl;
-//        cerr << "Falied to open at: " << strVocFile << endl;
-//        exit(-1);
-//    }
-//    cout << "Vocabulary loaded!" << endl << endl;
+    // //Load ORB Vocabulary
+    // cout << endl << "Loading ORB Vocabulary. This could take a while..." << endl;
+
+    // mpVocabulary = new ORBVocabulary();
+    // bool bVocLoad = mpVocabulary->loadFromTextFile(strVocFile);
+    // if(!bVocLoad)
+    // {
+    //     cerr << "Wrong path to vocabulary. " << endl;
+    //     cerr << "Falied to open at: " << strVocFile << endl;
+    //     exit(-1);
+    // }
+   cout << "Vocabulary loaded!" << endl << endl;
 
     mpVocabulary = pVocabulary;
     //Create KeyFrame Database
@@ -85,8 +85,8 @@ System::System(ORBVocabulary* pVocabulary, const string &strSettingsFile, const 
     
     //Create New MultiMapper - It also create LoopCloser Thread and Launch
     //mpMMapper = new MultiMapper(mpMap, mpKeyFrameDatabase, mpVocabulary);
-//    mpMMapper->AddMap(mpMap, mpKeyFrameDatabase);//Add the map to multimapper once it's created - use this when MM is implemented as thread 
-//    mpMMapper->SetVocabulary(mpVocabulary);
+    // mpMMapper->AddMap(mpMap, mpKeyFrameDatabase);//Add the map to multimapper once it's created - use this when MM is implemented as thread 
+    // mpMMapper->SetVocabulary(mpVocabulary);
     //mptMultiMapping = new thread(&iORB_SLAM::MultiMapper::Run, mpMMapper);
     
     //Init MultiMaps from xml file
@@ -624,6 +624,54 @@ void System::SwitchKFDB(KeyFrameDatabase* pKFDB)
 void System::SaveTrackingStates()
 {
     mpTracker->SaveStates();
+}
+
+void System::SaveTrajectory(const string &filename)
+{
+    cout << endl << "Saving camera trajectory to " << filename << " ..." << endl;
+
+    ofstream f;
+    f.open(filename.c_str());
+    f << fixed;
+
+    // Frame pose is stored relative to its reference keyframe (which is optimized by BA and pose graph).
+    // We need to get first the keyframe pose and then concatenate the relative transformation.
+    // Frames not localized (tracking failure) are not saved.
+
+    // For each frame we have a reference keyframe (lRit), the timestamp (lT) and a flag
+    // which is true when tracking failed (lbL).
+    list<iORB_SLAM::KeyFrame*>::iterator lRit = mpTracker->mlpReferences.begin();
+    list<double>::iterator lT = mpTracker->mlFrameTimes.begin();
+    list<bool>::iterator lbL = mpTracker->mlbLost.begin();
+    for(list<cv::Mat>::iterator lit=mpTracker->mlRelativeFramePoses.begin(),
+        lend=mpTracker->mlRelativeFramePoses.end();lit!=lend;lit++, lRit++, lT++, lbL++)
+    {
+        if(*lbL)
+            continue;
+
+        KeyFrame* pKF = *lRit;
+
+        cv::Mat Trw = cv::Mat::eye(4,4,CV_32F);
+
+        // If the reference keyframe was culled, traverse the spanning tree to get a suitable keyframe.
+        while(pKF->isBad())
+        {
+            Trw = Trw*pKF->mTcp;
+            pKF = pKF->GetParent();
+        }
+
+        Trw = Trw*pKF->GetPose();
+
+        cv::Mat Tcw = (*lit)*Trw;
+        cv::Mat Rwc = Tcw.rowRange(0,3).colRange(0,3).t();
+        cv::Mat twc = -Rwc*Tcw.rowRange(0,3).col(3);
+
+        vector<float> q = Converter::toQuaternion(Rwc);
+
+        f << setprecision(6) << *lT << " " <<  setprecision(9) << twc.at<float>(0) << " " << twc.at<float>(1) << " " << twc.at<float>(2) << " " << q[0] << " " << q[1] << " " << q[2] << " " << q[3] << " " << pKF->mTimeStamp << endl;
+    }
+    f.close();
+    cout << endl << "trajectory saved!" << endl;
 }
 
 } //namespace iORB_SLAM

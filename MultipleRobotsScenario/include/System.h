@@ -141,6 +141,8 @@ public:
 
     void SaveTrackingStates();
 
+    void SaveTrajectory(const string &filename);
+
 private:
 
     // Input sensor

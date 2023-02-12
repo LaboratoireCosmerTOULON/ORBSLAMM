@@ -1,0 +1,114 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "ORBSLAMM",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ORBSLAMM::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ORBSLAMM-Debug-f3a05622b2f59b03f18d.json",
+					"name" : "ORBSLAMM",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mono_Bebop::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mono_Bebop-Debug-20805271b0787b643e16.json",
+					"name" : "mono_Bebop",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mono_NewCollege::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mono_NewCollege-Debug-9365e81655279a53dbc6.json",
+					"name" : "mono_NewCollege",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mono_eth::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mono_eth-Debug-1f96d5f42e7f738dd670.json",
+					"name" : "mono_eth",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mono_kitti::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mono_kitti-Debug-dcd6b970a8e3640e9935.json",
+					"name" : "mono_kitti",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mono_kitti_dif-Seq::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mono_kitti_dif-Seq-Debug-37620ccf52cbfadafeb9.json",
+					"name" : "mono_kitti_dif-Seq",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mono_tum::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mono_tum-Debug-dcb9ef760b3459870a61.json",
+					"name" : "mono_tum",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario/cmake-build-debug",
+		"source" : "/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

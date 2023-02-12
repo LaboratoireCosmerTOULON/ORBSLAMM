@@ -485,6 +485,7 @@ void Optimizer::LocalBundleAdjustment(KeyFrame *pKF, bool* pbStopFlag, Map* pMap
     pKF->mnBALocalForKF = pKF->mnId;
 
     const vector<KeyFrame*> vNeighKFs = pKF->GetVectorCovisibleKeyFrames();
+    //std::cout << "vNeighKFs.size() : " << vNeighKFs.size() << std::endl;
     for(int i=0, iend=vNeighKFs.size(); i<iend; i++)
     {
         KeyFrame* pKFi = vNeighKFs[i];
@@ -492,6 +493,7 @@ void Optimizer::LocalBundleAdjustment(KeyFrame *pKF, bool* pbStopFlag, Map* pMap
         if(!pKFi->isBad())
             lLocalKeyFrames.push_back(pKFi);
     }
+    //std::cout << "lLocalKeyFrames.size() : " << lLocalKeyFrames.size() << std::endl;
 
     // Local MapPoints seen in Local KeyFrames
     list<MapPoint*> lLocalMapPoints;
@@ -510,6 +512,7 @@ void Optimizer::LocalBundleAdjustment(KeyFrame *pKF, bool* pbStopFlag, Map* pMap
                     }
         }
     }
+    //std::cout << "lLocalMapPoints.size() : " << lLocalMapPoints.size() << std::endl;
 
     // Fixed Keyframes. Keyframes that see Local MapPoints but that are not Local Keyframes
     list<KeyFrame*> lFixedCameras;
@@ -528,6 +531,7 @@ void Optimizer::LocalBundleAdjustment(KeyFrame *pKF, bool* pbStopFlag, Map* pMap
             }
         }
     }
+    //std::cout << "lFixedCameras.size() : " << lFixedCameras.size() << std::endl;
 
     // Setup optimizer
     g2o::SparseOptimizer optimizer;

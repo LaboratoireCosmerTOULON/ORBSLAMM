@@ -92,7 +92,8 @@ public:
     std::mutex mMutexPointCreation;
     
     unsigned int mnId; // For MultiMapper use
-    unsigned int mnNxtId;
+    // unsigned int mnNxtId;
+    static unsigned int mnNxtId;
     Map* mpMatchedMap;
     KeyFrame* mpMatchingKF;//in the current map
     KeyFrame* mpMatchedKF; // in the matched map

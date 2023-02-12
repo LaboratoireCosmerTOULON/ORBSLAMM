@@ -335,10 +335,11 @@ void Tracking::Track()
                     
                     if(!mpMMapper->GetmbUpdatingMapPoses() && !mpLoopClosing->GetmbRunningLoopClosing())
                     {
+                        std::cout << "Lost, need to create new map !" << std::endl;
                         //Create a new map (a new pointer to new MPs and KFs) 
                         mpMap = new Map(mpMap->mnNxtId);
-//                        mpMap->mpLocalMapper = mpLocalMapper;
-//                        mpMap->mpLoopCloser = mpLoopClosing;
+                        // mpMap->mpLocalMapper = mpLocalMapper;
+                        // mpMap->mpLoopCloser = mpLoopClosing;
 
                         mpKeyFrameDB = new KeyFrameDatabase(*mpORBVocabulary);
 

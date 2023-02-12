@@ -78,7 +78,9 @@ void LocalMapping::Run()
             {
                 // Local BA
                 if(mpMap->KeyFramesInMap()>2)
-                    Optimizer::LocalBundleAdjustment(mpCurrentKeyFrame,&mbAbortBA, mpMap);
+                {
+                    //Optimizer::LocalBundleAdjustment(mpCurrentKeyFrame,&mbAbortBA, mpMap);
+                }
 
                 // Check redundant local Keyframes
                 KeyFrameCulling();
@@ -131,6 +133,7 @@ void LocalMapping::ProcessNewKeyFrame()
         unique_lock<mutex> lock(mMutexNewKFs);
         mpCurrentKeyFrame = mlNewKeyFrames.front();
         mlNewKeyFrames.pop_front();
+        //std::cout << "Processing KF with id " << mpCurrentKeyFrame->mnId << " from system " << mpCurrentKeyFrame->mnSystemId << std::endl;
     }
 
     // Compute Bags of Words structures
@@ -202,6 +205,7 @@ void LocalMapping::MapPointCulling()
         else
             lit++;
     }
+    //std::cout << "MP culling" << std::endl;
 }
 
 void LocalMapping::CreateNewMapPoints()
@@ -449,6 +453,7 @@ void LocalMapping::CreateNewMapPoints()
             nnew++;
         }
     }
+    //std::cout << "New points created" << std::endl;
 }
 
 void LocalMapping::SearchInNeighbors()

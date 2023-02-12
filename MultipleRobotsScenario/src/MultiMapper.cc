@@ -171,6 +171,7 @@ namespace iORB_SLAM
 
 
                         const int nKFs = vpCandidateKFs.size();
+                        std::cout << "There are " << nKFs << " BoW candidates" << std::endl;
 
                         // We perform first an ORB matching with each candidate
                         // If enough matches are found we setup a PnP solver
@@ -219,6 +220,7 @@ namespace iORB_SLAM
                             }
                             else
                             {
+                                std::cout << "There are " << nmatches << " ORB matches with candidate" << std::endl;
                                 //pCurrentFrame->ComputeBoW();
                                 
                                 //PnPsolver* pSolver = new PnPsolver(*pCurrentFrame,vvpMapPointMatches[i]);

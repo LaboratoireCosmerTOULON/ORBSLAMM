@@ -26,10 +26,14 @@
 namespace iORB_SLAM
 {
 
+unsigned int Map::mnNxtId = 0;
+
 Map::Map(unsigned int Id = 0):mnMaxKFid(0),mnMaxMPid(0),mbIsAttached(false)
 {
-    mnId = Id;
-    mnNxtId = Id + 1;
+    // mnId = Id;
+    // mnNxtId = Id + 1;
+    mnId=mnNxtId++;
+    std::cout << "New map initialized with ID " << mnId << std::endl;
 }
 
 
