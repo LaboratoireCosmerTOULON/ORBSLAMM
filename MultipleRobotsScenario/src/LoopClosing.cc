@@ -69,6 +69,10 @@ void LoopClosing::Run()
         // Check if there are keyframes in the queue
         if(CheckNewKeyFrames())
         {
+            // Real-time analysis
+            bool bIsLoopCorrected = false;
+            std::chrono::steady_clock::time_point time_StartPRLC = std::chrono::steady_clock::now();
+
             // Detect loop candidates and check covisibility consistency
             if(DetectLoop())
             {
@@ -76,9 +80,46 @@ void LoopClosing::Run()
                // In the stereo/RGBD case s=1
                if(ComputeSim3())
                {
+                    // Real-time analysis
+                    std::chrono::steady_clock::time_point time_EndPRLC = std::chrono::steady_clock::now();
+                    mdPRLC_ms = std::chrono::duration_cast<std::chrono::duration<double,std::milli> >(time_EndPRLC - time_StartPRLC).count();
+
+                    // Real-time analysis
+                    std::chrono::steady_clock::time_point time_StartLC = std::chrono::steady_clock::now();
+
                    // Perform loop fusion and pose graph optimization
                    CorrectLoop();
+
+                   // Real-time analysis
+                    std::chrono::steady_clock::time_point time_EndLC = std::chrono::steady_clock::now();
+                    mdLC_ms = std::chrono::duration_cast<std::chrono::duration<double,std::milli> >(time_EndLC - time_StartLC).count();
+                    bIsLoopCorrected = true;
                }
+               else
+               {
+                    // Real-time analysis
+                    std::chrono::steady_clock::time_point time_EndPRLC = std::chrono::steady_clock::now();
+                    mdPRLC_ms = std::chrono::duration_cast<std::chrono::duration<double,std::milli> >(time_EndPRLC - time_StartPRLC).count();
+               }
+            }
+
+            // Real-time analysis
+            std::stringstream times_file;
+            times_file << "/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario/output/TimesPRLC_" << mpTracker->mpSystem->mnId << ".txt";
+            std::ofstream file_out;
+            file_out.open(times_file.str(), std::ios_base::app);
+            file_out << fixed;
+            file_out << mdPRLC_ms << endl;
+            file_out.close();
+
+            if (bIsLoopCorrected)
+            {
+                std::stringstream times_file2;
+                times_file << "/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario/output/TimesLC_" << mpTracker->mpSystem->mnId << ".txt";
+                file_out.open(times_file2.str(), std::ios_base::app);
+                file_out << fixed;
+                file_out << mdLC_ms << endl;
+                file_out.close();
             }
         }       
 

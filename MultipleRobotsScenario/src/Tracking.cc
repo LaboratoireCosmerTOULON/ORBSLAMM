@@ -276,6 +276,9 @@ cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
 
 void Tracking::Track()
 {
+    // Real-time analysis
+    std::chrono::steady_clock::time_point time_StartTracking = std::chrono::steady_clock::now();
+
     if(mState==NO_IMAGES_YET)
     {
         mState = NOT_INITIALIZED;
@@ -552,6 +555,17 @@ void Tracking::Track()
         mlFrameTimes.push_back(mlFrameTimes.back());
         mlbLost.push_back(mState==LOST);
     }
+
+    // Real-time analysis
+    std::chrono::steady_clock::time_point time_EndTracking = std::chrono::steady_clock::now();
+    mdTrack_ms = std::chrono::duration_cast<std::chrono::duration<double,std::milli> >(time_EndTracking - time_StartTracking).count();
+    std::stringstream times_file;
+    times_file << "/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario/output/TimesT_" << mpSystem->mnId << ".txt";
+    std::ofstream file_out;
+    file_out.open(times_file.str(), std::ios_base::app);
+    file_out << fixed;
+    file_out << mdTrack_ms << endl;
+    file_out.close();
 
 }
 

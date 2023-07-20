@@ -57,6 +57,9 @@ void LocalMapping::Run()
         // Check if there are keyframes in the queue
         if(CheckNewKeyFrames())
         {
+            // Real-time analysis
+            std::chrono::steady_clock::time_point time_StartNewKFProcessing = std::chrono::steady_clock::now();
+
             // BoW conversion and insertion in Map
             ProcessNewKeyFrame();
 
@@ -87,6 +90,17 @@ void LocalMapping::Run()
             }
             
             mpLoopCloser->InsertKeyFrame(mpCurrentKeyFrame);
+
+            // Real-time analysis
+            std::chrono::steady_clock::time_point time_EndNewKFProcessing = std::chrono::steady_clock::now();
+            mdNewKFProcessing_ms = std::chrono::duration_cast<std::chrono::duration<double,std::milli> >(time_EndNewKFProcessing - time_StartNewKFProcessing).count();
+            std::stringstream times_file;
+            times_file << "/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario/output/TimesLM_" << mpTracker->mpSystem->mnId << ".txt";
+            std::ofstream file_out;
+            file_out.open(times_file.str(), std::ios_base::app);
+            file_out << fixed;
+            file_out << mdNewKFProcessing_ms << endl;
+            file_out.close();
         }
         else if(Stop())
         {

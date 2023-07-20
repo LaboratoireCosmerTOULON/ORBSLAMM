@@ -86,6 +86,8 @@ public:
     //used by MMapper to draw baseMap at loopclosure event
     void InformDrawMap(Map* pMap);
 
+    // Real-time analysis
+    double mdTrack_ms;
 
 public:
 
@@ -130,6 +132,9 @@ public:
 
     void Reset();
     void ReInit();
+
+    // System (NDJD: was protected initially)
+    System* mpSystem;
 
 protected:
 
@@ -185,9 +190,6 @@ protected:
     KeyFrame* mpReferenceKF;
     std::vector<KeyFrame*> mvpLocalKeyFrames;
     std::vector<MapPoint*> mvpLocalMapPoints;
-    
-    // System
-    System* mpSystem;
     
     //Drawers
     Viewer* mpViewer;

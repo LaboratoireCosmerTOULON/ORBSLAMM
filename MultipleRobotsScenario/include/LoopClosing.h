@@ -98,6 +98,10 @@ public:
     void SetmbFinishedGBA(bool bVal);
     void InitGBAThread(int KFID);
 
+    // Real-time analysis
+    double mdPRLC_ms;
+    double mdLC_ms;
+
 protected:
 
     bool CheckNewKeyFrames();

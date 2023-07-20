@@ -51,6 +51,10 @@ namespace iORB_SLAM
             // Check if there are Maps in the queue
             if(CheckNewMap())
             {
+                // Real-time analysis
+                bool bIsLoopCorrected = false;
+                std::chrono::steady_clock::time_point time_StartPRMM = std::chrono::steady_clock::now();
+
                 mbClosingLoop = true;
                 // Detect loop candidates and check covisibility consistency
                 if(DetectLoop())
@@ -58,6 +62,17 @@ namespace iORB_SLAM
                    cout<<"MM Loop Detected!\n";
                     //SaveTrajectory("MMaps.txt");
                 }
+
+                // Real-time analysis
+                std::chrono::steady_clock::time_point time_EndPRMM = std::chrono::steady_clock::now();
+                mdPRMM_ms = std::chrono::duration_cast<std::chrono::duration<double,std::milli> >(time_EndPRMM - time_StartPRMM).count();
+                std::stringstream times_file;
+                times_file << "/home/ju/Thirdparty/ORBSLAMM/MultipleRobotsScenario/output/TimesPRMM.txt";
+                std::ofstream file_out;
+                file_out.open(times_file.str(), std::ios_base::app);
+                file_out << fixed;
+                file_out << mdPRMM_ms << endl;
+                file_out.close();
             }       
             
             mbClosingLoop = false;

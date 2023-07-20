@@ -91,6 +91,9 @@ public:
     std::mutex mMutexMuliMapUpdate;
     
     bool mbClosingLoop;
+
+    // Real-time analysis
+    double mdPRMM_ms;
     
 protected:
     

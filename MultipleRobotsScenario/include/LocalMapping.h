@@ -75,6 +75,9 @@ public:
     
     void SwitchMap(Map* pMap);
 
+    // Real-time analysis
+    double mdNewKFProcessing_ms;
+
 protected:
 
     bool CheckNewKeyFrames();
